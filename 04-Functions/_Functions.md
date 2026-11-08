@@ -6,6 +6,8 @@ stalj@uek.krakow.pl
 -->
 
 # FUNCTIONS
+# [Otwórz interaktywną pracownię ćwiczeń](interactive.html)
+# [Otwórz interaktywną pracownię ćwiczeń](interactive.html)
 
 ## 1. Introduction
 
