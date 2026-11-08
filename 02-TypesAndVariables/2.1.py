@@ -1,0 +1,8 @@
+print("+ : addition and string concatenation")
+print("* : multiplication and string repetition")
+print("** : exponentiation")
+print("/ : division")
+print("// : floor division")
+print("% : modulo, the remainder of division")
+print("> : greater than comparison")
+print("<= : less than or equal comparison")

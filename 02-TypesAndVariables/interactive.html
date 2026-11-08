@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f2">
+  <title>Types & Variables | Practice Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f6f7f2;
+      --ink: #172321;
+      --muted: #65726f;
+      --line: #dce2dc;
+      --panel: #fff;
+      --green: #176f5b;
+      --green-soft: #e2f2eb;
+      --orange: #e3633b;
+      --orange-soft: #fff0e8;
+      --code: #172321;
+      --mono: 'IBM Plex Mono', monospace;
+      --display: 'Space Grotesk', sans-serif;
+      --body: 'DM Sans', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--body); }
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 280px minmax(0, 1fr); }
+    aside { padding: 28px 20px; border-right: 1px solid var(--line); background: rgba(255,255,255,.55); }
+    .brand { display: flex; align-items: center; gap: 12px; margin: 0 0 30px; }
+    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; background: var(--green); color: white; font: 700 15px var(--display); border-radius: 8px; }
+    .brand strong { display: block; font: 700 15px var(--display); }
+    .brand span { color: var(--muted); font-size: 12px; }
+    .progress-card { padding: 15px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); margin-bottom: 28px; }
+    .progress-label { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); }
+    .progress-label strong { color: var(--ink); font: 600 13px var(--mono); }
+    .progress-track { height: 6px; background: #e8ede8; border-radius: 99px; overflow: hidden; margin-top: 12px; }
+    .progress-fill { width: 0; height: 100%; background: var(--green); transition: width .3s ease; }
+    .nav-title { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; font-weight: 700; margin: 0 0 9px 10px; }
+    .task-nav { display: grid; gap: 4px; }
+    .nav-item { width: 100%; border: 0; background: transparent; padding: 9px 10px; border-radius: 6px; color: var(--ink); text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; }
+    .nav-item:hover { background: #edf1ec; }
+    .nav-item.active { background: var(--green-soft); color: #145a4b; font-weight: 700; }
+    .nav-item .count { color: var(--muted); font: 11px var(--mono); }
+    .nav-item.done .count { color: var(--green); }
+    .aside-foot { color: var(--muted); font-size: 11px; line-height: 1.5; margin: 28px 10px 0; }
+    main { min-width: 0; padding: 30px clamp(20px, 5vw, 72px) 60px; background-image: radial-gradient(#d7dfd8 0.65px, transparent .65px); background-size: 16px 16px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; max-width: 1120px; margin: 0 auto 34px; }
+    .crumb { color: var(--muted); font-size: 12px; }
+    .crumb b { color: var(--ink); font-weight: 600; }
+    .reset { border: 1px solid var(--line); border-radius: 6px; color: var(--muted); padding: 8px 11px; background: white; font-size: 12px; }
+    .reset:hover { color: var(--orange); border-color: #efb6a2; }
+    .content { max-width: 920px; margin: auto; }
+    .eyebrow { color: var(--green); text-transform: uppercase; letter-spacing: .12em; font-size: 11px; font-weight: 700; }
+    h1 { font: 700 clamp(28px, 4vw, 42px)/1.08 var(--display); letter-spacing: 0; margin: 8px 0 12px; }
+    .intro { max-width: 660px; color: var(--muted); font-size: 15px; line-height: 1.65; margin: 0 0 30px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr); gap: 16px; align-items: start; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 8px 24px rgba(23,35,33,.035); }
+    .panel-head { padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .panel-head h2 { font: 600 14px var(--display); margin: 0; }
+    .task-number { color: var(--muted); font: 11px var(--mono); }
+    .task-body { padding: 20px; }
+    .task-title { font: 600 21px/1.2 var(--display); margin: 0 0 10px; }
+    .task-prompt { color: #4c5a56; font-size: 14px; line-height: 1.65; margin: 0 0 14px; }
+    .hint { border-left: 3px solid var(--orange); background: var(--orange-soft); color: #704333; padding: 10px 12px; font-size: 12px; line-height: 1.5; margin: 16px 0 0; }
+    .editor-head { padding: 11px 14px; color: #c2d0cb; background: #21312d; display: flex; justify-content: space-between; font: 11px var(--mono); }
+    textarea { display: block; resize: vertical; width: 100%; min-height: 240px; border: 0; outline: 0; padding: 16px; color: #e5eee9; background: var(--code); font: 13px/1.65 var(--mono); tab-size: 4; }
+    .editor-actions { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-top: 1px solid #35443f; background: var(--code); }
+    .run { display: inline-flex; gap: 8px; align-items: center; border: 0; border-radius: 6px; background: #f18153; color: #201f1b; padding: 9px 14px; font-size: 13px; font-weight: 700; }
+    .run:hover { background: #ff9a6e; }
+    .run:disabled { opacity: .55; cursor: wait; }
+    .run-icon { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 7px solid currentColor; }
+    .run-note { color: #aebbb6; font-size: 11px; }
+    .feedback { display: none; padding: 14px 16px; border-top: 1px solid var(--line); font-size: 13px; line-height: 1.55; }
+    .feedback.show { display: block; }
+    .feedback.success { background: var(--green-soft); color: #145a4b; }
+    .feedback.error { background: #fff0e8; color: #8d3f26; }
+    .output-wrap { padding: 15px 16px; min-height: 70px; color: #d9e5df; background: var(--code); font: 12px/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+    .output-empty { color: #91a29b; }
+    .next-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 16px; }
+    .next-row p { margin: 0; color: var(--muted); font-size: 11px; }
+    .next-btn { border: 1px solid var(--green); border-radius: 6px; padding: 9px 13px; background: var(--green); color: white; font-size: 12px; font-weight: 700; }
+    .next-btn:hover { background: #105544; }
+    .loading { position: fixed; inset: auto 20px 20px auto; padding: 11px 14px; border-radius: 6px; background: #21312d; color: white; font-size: 12px; box-shadow: 0 8px 24px #17232133; }
+    .mobile-select { display: none; width: 100%; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 6px; padding: 10px; background: white; }
+    @media (max-width: 820px) {
+      .shell { grid-template-columns: 1fr; }
+      aside { display: none; }
+      main { padding: 18px 16px 44px; }
+      .topbar { margin-bottom: 24px; }
+      .mobile-select { display: block; }
+      .layout { grid-template-columns: 1fr; }
+      textarea { min-height: 210px; }
+    }
+    @media (max-width: 420px) {
+      .task-body { padding: 16px; }
+      .topbar { align-items: flex-start; }
+      .crumb { max-width: 170px; line-height: 1.5; }
+      .run-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand"><div class="brand-mark">Py</div><div><strong>Practice Lab</strong><span>Types & Variables</span></div></div>
+      <div class="progress-card"><div class="progress-label"><span>Chapter progress</span><strong id="progressText">0 / 49</strong></div><div class="progress-track"><div id="progressFill" class="progress-fill"></div></div></div>
+      <p class="nav-title">Exercises</p>
+      <nav id="taskNav" class="task-nav" aria-label="Exercises"></nav>
+      <p class="aside-foot">Your answers run privately in this browser. Progress is saved on this device.</p>
+    </aside>
+    <main>
+      <div class="topbar"><div class="crumb">Fundamentals of Programming <span> / </span> <b>Types, Variables & Operators</b></div><button id="resetProgress" class="reset" type="button">Reset progress</button></div>
+      <div class="content">
+        <select id="mobileNav" class="mobile-select" aria-label="Choose an exercise"></select>
+        <div class="eyebrow" id="sectionLabel">01 / Getting started</div>
+        <h1 id="pageTitle">Make it run.</h1>
+        <p class="intro">Write a solution or complete the starter code, then run the checks. A task is marked complete only when your program passes its tests.</p>
+        <div class="layout">
+          <section class="panel" aria-labelledby="taskHeading">
+            <div class="panel-head"><h2 id="taskHeading">Your challenge</h2><span class="task-number" id="taskNumber">TASK 01</span></div>
+            <div class="task-body"><h3 class="task-title" id="taskTitle"></h3><p class="task-prompt" id="taskPrompt"></p><div id="taskHint" class="hint" hidden></div></div>
+            <div class="editor-head"><span>solution.py</span><span>Python 3</span></div>
+            <textarea id="codeEditor" spellcheck="false" aria-label="Python code editor" autocapitalize="off" autocomplete="off"></textarea>
+            <div class="editor-actions"><button id="runCode" class="run" type="button"><span class="run-icon" aria-hidden="true"></span><span>Run checks</span></button><span class="run-note">Shift + Enter to run</span></div>
+            <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+          </section>
+          <section class="panel" aria-labelledby="outputHeading">
+            <div class="panel-head"><h2 id="outputHeading">Program output</h2><span class="task-number">LIVE</span></div>
+            <div id="output" class="output-wrap"><span class="output-empty">Run your code to see what it prints.</span></div>
+          </section>
+        </div>
+        <div class="next-row"><p>Checks include the sample values from the worksheet.</p><button id="nextTask" class="next-btn" type="button">Next exercise &rarr;</button></div>
+      </div>
+    </main>
+  </div>
+  <div id="loading" class="loading">Starting Python runtime...</div>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+  <script>
+    const exercises = [
+      { section: '01 / Getting started', title: 'Operators and order', prompt: 'Create a variable named result for 1 + 2 % 3 ** 4 * 5, then print it.', starter: '# Calculate the expression and print the result\n', check: 'assert scope.get("result") == 11, "Check operator precedence and assignment."\nassert output.strip() == "11", "Print the result."' },
+      { section: '01 / Getting started', title: 'Swap two values', prompt: 'Set x to 7 and y to 34. Swap them using an auxiliary variable named temp.', starter: 'x = 7\ny = 34\n# Swap the values\n', check: 'assert scope.get("x") == 34 and scope.get("y") == 7, "After swapping, x must be 34 and y must be 7."\nassert "temp" in scope, "Use the auxiliary variable temp."' },
+      { section: '02 / Variables & calculations', title: 'Convert a speed', prompt: 'Convert 70 km/h to metres per second. Store the answer in speed_ms and print it. Use 1 km/h = 1/3.6 m/s.', starter: 'speed_kmh = 70\n# Calculate speed_ms\n', check: 'assert abs(scope.get("speed_ms", 0) - 70 / 3.6) < 0.001, "Use speed_kmh / 3.6."\nassert output.strip() == "19.444444444444443" or abs(float(output.strip()) - 70 / 3.6) < 0.001, "Print the converted speed."' },
+      { section: '02 / Variables & calculations', title: 'Rectangle diagonal', prompt: 'Calculate the diagonal of a rectangle with sides 5 and 8. Store it in diagonal and print it. Use math.sqrt().', starter: 'import math\na = 5\nb = 8\n', check: 'assert abs(scope.get("diagonal", 0) - math.sqrt(89)) < 0.001, "Use the Pythagorean theorem: sqrt(a**2 + b**2)."' },
+      { section: '02 / Variables & calculations', title: 'Distance to the horizon', prompt: 'Ask for the observer height in metres. Calculate distance = 3.57 * sqrt(height) and print the distance in km. Test input: 20.', starter: 'import math\nheight = int(input("Height in metres: "))\n', inputs: ['20'], check: 'assert abs(scope.get("distance", 0) - 3.57 * math.sqrt(20)) < 0.001, "Use distance = 3.57 * sqrt(height)."' },
+      { section: '02 / Variables & calculations', title: 'Hemisphere population', prompt: 'World population is 8,000,000,000 and the north has 7,200,000,000. Calculate south and both percentages. Store them in south, north_percent and south_percent.', starter: 'total = 8000000000\nnorth = 7200000000\n', check: 'assert scope.get("south") == 800000000, "Calculate south as total - north."\nassert abs(scope.get("north_percent", 0) - 90) < 0.001 and abs(scope.get("south_percent", 0) - 10) < 0.001, "Calculate each share as population / total * 100."' },
+      { section: '02 / Variables & calculations', title: 'Fix the average grade', prompt: 'Calculate the arithmetic mean of grades 5, 4, 5 and 3. Store it in average and print it.', starter: 'math = 5\nart = 4\nmusic = 5\nhistory = 3\n# Calculate and print average\n', check: 'assert abs(scope.get("average", 0) - 4.25) < 0.001, "Add all four grades and divide by 4."' },
+      { section: '03 / Input & output', title: 'Introduce yourself', prompt: 'Read first and last name, then print the full name on one line. Test input: Ada, Lovelace.', starter: 'first_name = input("First name: ")\nlast_name = input("Last name: ")\n', inputs: ['Ada', 'Lovelace'], check: 'assert "Ada Lovelace" in output, "Join the first and last name with one space and print them."' },
+      { section: '03 / Input & output', title: 'Cube calculator', prompt: 'Read the cube side as an integer, calculate volume and surface area, then print both. Store them in cube_volume and cube_surface_area. Test inputs: 4 and 7.', starter: 'side = int(input("Cube side: "))\n', testCases: [['4'], ['7']], check: 'assert scope.get("cube_volume") == side ** 3, "Volume is side ** 3."\nassert scope.get("cube_surface_area") == 6 * side ** 2, "Surface area is 6 * side ** 2."' },
+      { section: '03 / Input & output', title: 'VAT at 23%', prompt: 'Read an amount and calculate VAT at 23%, storing it in vat. Print the amount and VAT with two decimal places. Test input: 15.84.', starter: 'amount = float(input("Amount: "))\n', inputs: ['15.84'], check: 'assert abs(scope.get("vat", 0) - 3.6432) < 0.001, "VAT is amount * 0.23."\nassert "3.64" in output, "Format the VAT to two decimal places."' },
+      { section: '03 / Input & output', title: 'Apply a discount', prompt: 'Read price and discount percent. Store the discounted price in discounted_price and the difference in reduction. Print both to two decimal places. Test inputs: 24.72 and 15.', starter: 'price = float(input("Price: "))\ndiscount = float(input("Discount %: "))\n', inputs: ['24.72', '15'], check: 'assert abs(scope.get("discounted_price", 0) - 21.012) < 0.001, "Calculate price * (1 - discount / 100)."\nassert abs(scope.get("reduction", 0) - 3.708) < 0.001, "Reduction is price - discounted_price."\nassert "21.01" in output and "3.71" in output, "Print both values to two decimal places."' },
+      { section: '04 / Strings', title: 'Print your initials', prompt: 'Use the name and surname below to print the initials: G.M. Include the dot separators.', starter: 'name = "George"\nsurname = "Martin"\n', check: 'assert "G.M." in output.replace(" ", ""), "Use index 0 from both strings and print G.M."' },
+      { section: '04 / Strings', title: 'University abbreviation', prompt: 'Print KUE using the first letter of each word in the university name.', starter: 'university = "Krakow University of Economics"\n', check: 'assert "KUE" in output, "Use the first letter of Krakow, University and Economics."' },
+      { section: '04 / Strings', title: 'Format a phone number', prompt: 'Read a 9-digit number and print it as three groups separated by dashes. Test input: 543097329.', starter: 'phone = input("Enter phone number: ")\n', inputs: ['543097329'], check: 'assert "543-097-329" in output, "Slice the string into groups of three digits."' },
+      { section: '04 / Strings', title: 'Letters between', prompt: 'Read two uppercase letters and print how many letters are strictly between them. The result cannot be negative: when the letters are the same, return 0. Store the result in number_of_letters. Tests: A-D, B-M and K-K.', starter: 'first = input("First letter: ")\nlast = input("Last letter: ")\n', testCases: [['A', 'D'], ['B', 'M'], ['K', 'K']], check: 'expected = max(0, ord(last) - ord(first) - 1)\nassert scope.get("number_of_letters") == expected, "The count cannot be negative. Use max(0, ord(last) - ord(first) - 1)."\nassert str(expected) in output, "Print the number of letters between the two inputs."' },
+      { section: '04 / Strings', title: 'Explore a movie title', prompt: 'Print the character count, uppercase and lowercase title, count of e, index of Lord, and search result for dragon.', starter: 'movie = "The Lord of the Rings: The Return of the King"\n', check: 'lines = output.splitlines()\nassert lines[0] == "45", "Print the number of characters."\nassert lines[1] == "THE LORD OF THE RINGS: THE RETURN OF THE KING"\nassert lines[2] == "the lord of the rings: the return of the king"\nassert lines[3] == "5", "Count occurrences of lowercase e."\nassert lines[4] == "4", "Lord starts at index 4."\nassert lines[5] == "-1", "dragon is not in the title, so find() returns -1."' },
+      { section: '05 / Conditions', title: 'Tax exemption', prompt: 'Read ages and store in no_tax whether each person aged up to and including 26 is exempt. Tests: 38, 27, 26, 22 and 18.', starter: 'age = int(input("Age: "))\n', testCases: [['38'], ['27'], ['26'], ['22'], ['18']], check: 'assert scope.get("no_tax") is (age <= 26), "Use age <= 26."' },
+      { section: '05 / Conditions', title: 'Check an even number', prompt: 'Read an integer and store in even whether it is divisible by 2. Print the boolean. Tests: 24, 8, 31 and 5.', starter: 'number = int(input("Number: "))\n', testCases: [['24'], ['8'], ['31'], ['5']], check: 'assert scope.get("even") is (number % 2 == 0), "Use number % 2 == 0."' },
+      { section: '05 / Conditions', title: 'Krakow registration', prompt: 'Read a registration number. Store in is_krakow whether it starts with KR or KK. Test both Krakow prefixes and a non-Krakow prefix.', starter: 'car_number = input("Registration: ")\n', testCases: [['KR4AB12'], ['KK12345'], ['WA12345']], check: 'assert scope.get("is_krakow") is (car_number[:2] in ("KR", "KK")), "Check whether the first two characters are KR or KK."' },
+      { section: '05 / Conditions', title: 'Valid highway speed', prompt: 'Store in speed_valid whether each speed is between 40 and 140 km/h inclusive. Tests: 39, 40, 140, 141 and 158.', starter: 'speed = int(input("Speed: "))\n', testCases: [['39'], ['40'], ['140'], ['141'], ['158']], check: 'assert scope.get("speed_valid") is (40 <= speed <= 140), "Check 40 <= speed <= 140."' },
+      { section: '06 / Random numbers', title: 'Special dice roll', prompt: 'Roll one die and store the result in dice_roll. Store in special whether it is 1 or 6, then print both.', starter: 'import random\ndice_roll = random.randint(1, 6)\n', check: 'assert 1 <= scope.get("dice_roll", 0) <= 6, "A die roll must be between 1 and 6."\nassert scope.get("special") is (scope.get("dice_roll") in (1, 6)), "special should be True only for 1 or 6."' },
+      { section: '06 / Random numbers', title: 'Guess the die', prompt: 'The computer rolls a die. Read your guess as an integer and store in won whether it matches. Print the result.', starter: 'import random\ncomputer = random.randint(1, 6)\nyou = int(input("Your guess: "))\n', inputs: ['1'], check: 'assert scope.get("won") is (scope.get("you") == scope.get("computer")), "Compare your guess and the computer roll."' },
+      { section: '07 / Practice', title: 'Circle measurements', prompt: 'For radius 3, calculate circumference and area using pi = 3.14.', starter: 'pi = 3.14\nradius = 3\n', check: 'assert abs(scope.get("circumference", 0) - 18.84) < 0.001, "Circumference is 2 * pi * radius."\nassert abs(scope.get("area", 0) - 28.26) < 0.001, "Area is pi * radius ** 2."' },
+      { section: '07 / Practice', title: 'Temperature converter', prompt: 'Read Celsius and store the converted temperatures in kelvin and fahrenheit. Print both. Test input: 20.', starter: 'celsius = float(input("Celsius: "))\n', inputs: ['20'], check: 'assert abs(scope.get("kelvin", 0) - 293.15) < 0.001, "Kelvin is Celsius + 273.15."\nassert abs(scope.get("fahrenheit", 0) - 68) < 0.001, "Fahrenheit is Celsius * 9 / 5 + 32."' },
+      { section: '07 / Practice', title: 'Height in feet and inches', prompt: 'Convert 170 cm to feet and remaining inches. Use 1 inch = 2.54 cm and 12 inches = 1 foot.', starter: 'cm = 170\n', check: 'assert scope.get("feet") == 5, "170 cm is 5 whole feet."\nassert abs(scope.get("inches", 0) - 6.929) < 0.01, "Use the remainder after converting to inches."' },
+      { section: '07 / Practice', title: 'Read a SWIFT code', prompt: 'Read a SWIFT code and print its bank code (first 4 characters) and country code (next 2). Tests: BPKOPLPW, CHASUS33 and DEUTDEFF.', starter: 'swift = input("SWIFT code: ")\n', testCases: [['BPKOPLPW'], ['CHASUS33'], ['DEUTDEFF']], check: 'assert swift[:4] in output and swift[4:6] in output, "Print slices swift[0:4] and swift[4:6]."' },
+      { section: '07 / Practice', title: 'Transport cost', prompt: 'Read distance, fuel price and consumption per 100 km. Store the results in total_fuel_consumption and total_cost, then print both. Test inputs: 250 km, 6.50 per litre, 7.2 L/100 km.', starter: 'distance = float(input("Distance km: "))\nfuel_price = float(input("Fuel price: "))\nfuel_consumption = float(input("Litres per 100 km: "))\n', inputs: ['250', '6.5', '7.2'], check: 'assert abs(scope.get("total_fuel_consumption", 0) - 18) < 0.001, "Fuel used is distance * consumption / 100."\nassert abs(scope.get("total_cost", 0) - 117) < 0.001, "Cost is total fuel * fuel price."' },
+      { section: '07 / Practice', title: 'Binary and hexadecimal', prompt: 'Read an integer and print its binary and hexadecimal representation. Test input: 125.', starter: 'number = int(input("Number: "))\n', inputs: ['125'], check: 'assert "0b1111101" in output, "Use bin(number)."\nassert "0x7d" in output.lower(), "Use hex(number)."' },
+      { section: '01 / Getting started', title: 'Identify data types', prompt: 'Use type() to identify the types of 50, 149.17, 4 * 7, 4.0 * 7, "KUE", True and 2 > 5. Store the names in types, separated by spaces, and print them.', starter: '# Use type(value).__name__\n', check: 'assert scope.get("types") == "int float int float str bool bool", "Check each value, including arithmetic and comparison expressions."\nassert "int float int float str bool bool" in output, "Print the type names."' },
+      { section: '01 / Getting started', title: 'BMI calculator', prompt: 'Read height in cm and weight in kg. Calculate BMI rounded to 2 decimals and store it in bmi. Test inputs: 170 and 65.', starter: 'height = int(input("Height in cm: "))\nweight = int(input("Weight in kg: "))\n', inputs: ['170', '65'], check: 'assert scope.get("bmi") == 22.49, "BMI is weight / (height / 100) ** 2, rounded to 2 decimals."' },
+      { section: '02 / Variables & calculations', title: 'Sum three numbers', prompt: 'Add 71, 14 and 10. Store the result in result and print it.', starter: 'number1 = 71\nnumber2 = 14\nnumber3 = 10\n', check: 'assert scope.get("result") == 95, "Add all three numbers."\nassert "95" in output, "Print the result."' },
+      { section: '03 / Input & output', title: 'Family income per person', prompt: 'Calculate total family income and income per person. Store the results in total_income and income_per_person.', starter: 'father_income = 5450\nmother_income = 4920\nfamily_members = 5\n', check: 'assert scope.get("total_income") == 10370, "Add both incomes."\nassert scope.get("income_per_person") == 2074, "Divide total income by family members."' },
+      { section: '03 / Input & output', title: 'Cuboid dimensions', prompt: 'Read three sides, then calculate and print volume and surface area. Store the results in volume and either surface_area or surface. Tests: 3, 4, 5 and 8, 1, 2. (For 3, 4, 5 the volume is 60 and the surface area is 94.)', starter: 'a = int(input("a="))\nb = int(input("b="))\nc = int(input("c="))\n', testCases: [['3', '4', '5'], ['8', '1', '2']], check: 'assert scope.get("volume") == a * b * c, "Volume is a * b * c."\nactual_surface = scope.get("surface_area", scope.get("surface"))\nassert actual_surface == 2 * (a*b + a*c + b*c), "Store the surface area in surface_area or surface; calculate 2 * (a*b + a*c + b*c)."\nassert str(volume) in output and str(actual_surface) in output, "Print the volume and surface area."' },
+      { section: '04 / Strings', title: 'Count name characters', prompt: 'For Anna May, store the character counts in name_length, surname_length and full_name_length. Count the space in the full name.', starter: 'name = "Anna"\nsurname = "May"\n', check: 'assert scope.get("name_length") == 4 and scope.get("surname_length") == 3, "Count each part with len()."\nassert scope.get("full_name_length") == 8, "The full name includes the separating space."' },
+      { section: '04 / Strings', title: 'Extract employee details', prompt: 'From the employee record, print the name, surname, date of birth and initials on separate lines.', starter: 'employee = "Mr. John May, born on 1998-02-16"\n', check: 'assert "Name: John" in output\nassert "Surname: May" in output\nassert "Born: 1998-02-16" in output\nassert "Initials: JM" in output' },
+      { section: '04 / Strings', title: 'Character codes', prompt: 'Print the numeric codes for a, b, z, A, B, Z, 1, =, + and the euro sign.', starter: '# Use ord(character)\n', check: 'assert all(value in output for value in ["a 97", "b 98", "z 122", "A 65", "B 66", "Z 90", "1 49", "= 61", "+ 43", "€ 8364"]), "Print each character next to its ord() value."' },
+      { section: '04 / Strings', title: 'Decode a message', prompt: 'Convert the character codes 67, 111, 111, 108 and 33 to characters and print the hidden word.', starter: '# Use chr(code)\n', check: 'assert "Cool!" in output, "The decoded message is Cool!."' },
+      { section: '05 / Conditions', title: 'Check password length', prompt: 'Read a password and store in password_ok whether it has at least 8 characters. Tests include valid and short passwords.', starter: 'password = input("Password: ")\n', testCases: [['university'], ['peter123'], ['seven'], ['anna333']], check: 'assert scope.get("password_ok") is (len(password) >= 8), "A valid password has at least 8 characters."' },
+      { section: '05 / Conditions', title: 'Can the tree be cut?', prompt: 'Read a tree circumference in cm. Calculate its diameter using pi = 3.14. Store in can_cut whether the diameter is at least 50 cm. Tests: 160, 90, 230 and 120.', starter: 'circumference = float(input("Circumference in cm: "))\n', testCases: [['160'], ['90'], ['230'], ['120']], check: 'diameter = circumference / 3.14\nassert scope.get("can_cut") is (diameter >= 50), "Diameter is circumference / 3.14; compare it with 50."' },
+      { section: '06 / Random numbers', title: 'Roll three dice', prompt: 'Roll three dice, store the results in dice_roll_1, dice_roll_2 and dice_roll_3, calculate total, and print the rolls and total.', starter: 'import random\n', check: 'assert all(1 <= scope.get(name, 0) <= 6 for name in ("dice_roll_1", "dice_roll_2", "dice_roll_3")), "Each die roll must be between 1 and 6."\nassert scope.get("total") == sum(scope[name] for name in ("dice_roll_1", "dice_roll_2", "dice_roll_3")), "Add the three rolls."' },
+      { section: '01 / Getting started', title: 'Interactive or script mode?', prompt: 'Set modes to the correct execution mode for: trying one expression and seeing its result immediately; running a saved multi-line BMI program; trying one small calculation at a prompt. Print the list.', starter: '# Use the strings "interactive" and "script"\n', check: 'assert scope.get("modes") == ["interactive", "script", "interactive"], "Use interactive mode for one-off commands and script mode for a saved program."' },
+      { section: '01 / Getting started', title: 'Try the operators', prompt: 'Calculate the worksheet expressions plus 7 // 2, 7 / 2, 7 % 2, 7 > 5 and 7 <= 5. Store all results in results. For 1 + 2 % 3 ** 4 * 5, also record operator_count and argument_count.', starter: '# Keep results in this order:\n# 3*2+1, 5+10*5, 4+4/2**2, 4%3%2%1, 1+2%3**4*5, True!=False, 7//2, 7/2, 7%2, 7>5, 7<=5\n', check: 'assert scope.get("results") == [7, 55, 5.0, 0, 11, True, 3, 3.5, 1, True, False], "Check operator precedence, division, floor division, remainder and comparisons."\nassert scope.get("operator_count") == 4 and scope.get("argument_count") == 5, "The expression has four operators and five arguments."' },
+      { section: '02 / Variables & calculations', title: 'Analyze company variables', prompt: 'Complete the calculated variables, then record how many variables the program contains. Use variable_count, big_company and income_per_person.', starter: 'company = "ABC Data"\nphone = "555-123-009"\nemployees = 25\nremote_work = True\nincome = 4500000\n', check: 'assert scope.get("variable_count") == 7, "The program contains seven variables."\nassert scope.get("big_company") is False and type(scope.get("big_company")) is bool, "Compare employees with 100."\nassert scope.get("income_per_person") == 180000 and type(scope.get("income_per_person")) is float, "Divide income by employees."' },
+      { section: '03 / Input & output', title: 'Format student details', prompt: 'Use f-strings to print the name, age, height and age in six years. Use Adam, 20 years and 180 cm.', starter: 'name = "Adam"\nage = 20\nheight = 180\n', check: 'assert "My name is Adam." in output\nassert "I am 20 years old, and my height is 180 cm." in output\nassert "In 6 years I will be 26 years old." in output' },
+      { section: '03 / Input & output', title: 'Format arithmetic expressions', prompt: 'For a=3 and b=5, use f-strings to print addition, subtraction, multiplication and division as expressions with their results.', starter: 'a = 3\nb = 5\n', check: 'assert "3+5=8" in output\nassert "3-5=-2" in output\nassert "3*5=15" in output\nassert "3/5=0.6" in output' },
+      { section: '04 / Strings', title: 'Character codes in your name', prompt: 'For the name John, print each letter and its numeric code using indexing and ord().', starter: 'name = "John"\n', check: 'assert all(f"{character} {ord(character)}" in output for character in "John"), "Use name[index] and ord() for each character."' },
+      { section: '06 / Random numbers', title: 'Roll five dice', prompt: 'Simulate five dice rolls and print them. Store them in dice_roll_1 through dice_roll_5.', starter: 'import random\n', check: 'names = [f"dice_roll_{index}" for index in range(1, 6)]\nassert all(1 <= scope.get(name, 0) <= 6 for name in names), "Each of the five dice must be between 1 and 6."' },
+      { section: '06 / Random numbers', title: 'Random number range', prompt: 'Generate and print a random integer from 5 through 10 inclusive using randint().', starter: 'import random\n', check: 'assert 5 <= scope.get("random_number", 0) <= 10, "Use random.randint(5, 10)."' },
+      { section: '02 / Variables & calculations', title: 'Triangle area and mean', prompt: 'Calculate the area of a triangle with base 5 and height 4. Also calculate the mean of 7, 12 and 31 rounded to two decimal places. Print both.', starter: 'base = 5\nheight = 4\n', check: 'assert scope.get("triangle_area") == 10, "Triangle area is base * height / 2."\nassert scope.get("mean") == 16.67, "Calculate and round the arithmetic mean to two decimal places."\nassert "10" in output and "16.67" in output, "Print both results."' }
+    ];
+
+    const storageKey = 'types-variables-practice-v1';
+    let completed = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+    let currentIndex = 0;
+    let pyodidePromise;
+    const $ = (id) => document.getElementById(id);
+
+    function updateProgress() {
+      $('progressText').textContent = `${completed.size} / ${exercises.length}`;
+      $('progressFill').style.width = `${completed.size / exercises.length * 100}%`;
+      $('taskNav').querySelectorAll('.nav-item').forEach((item, index) => {
+        item.classList.toggle('done', completed.has(index));
+        item.querySelector('.count').textContent = completed.has(index) ? 'DONE' : String(index + 1).padStart(2, '0');
+      });
+      localStorage.setItem(storageKey, JSON.stringify([...completed]));
+    }
+
+    function buildNavigation() {
+      const nav = $('taskNav');
+      const mobile = $('mobileNav');
+      exercises.forEach((exercise, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'nav-item';
+        button.innerHTML = `<span>${exercise.title}</span><span class="count">${String(index + 1).padStart(2, '0')}</span>`;
+        button.addEventListener('click', () => showExercise(index));
+        nav.append(button);
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${String(index + 1).padStart(2, '0')}  ${exercise.title}`;
+        mobile.append(option);
+      });
+      mobile.addEventListener('change', () => showExercise(Number(mobile.value)));
+      updateProgress();
+    }
+
+    function showExercise(index) {
+      currentIndex = index;
+      const exercise = exercises[index];
+      $('sectionLabel').textContent = exercise.section;
+      $('pageTitle').textContent = exercise.title;
+      $('taskTitle').textContent = exercise.title;
+      $('taskPrompt').textContent = exercise.prompt;
+      $('taskNumber').textContent = `TASK ${String(index + 1).padStart(2, '0')}`;
+      $('codeEditor').value = exercise.starter;
+      $('output').innerHTML = '<span class="output-empty">Run your code to see what it prints.</span>';
+      $('feedback').className = 'feedback';
+      $('feedback').textContent = '';
+      $('taskHint').hidden = !completed.has(index);
+      $('taskHint').textContent = completed.has(index) ? 'Already completed. Run it again to practice, or move on to another exercise.' : '';
+      $('mobileNav').value = String(index);
+      $('taskNav').querySelectorAll('.nav-item').forEach((item, itemIndex) => item.classList.toggle('active', index === itemIndex));
+    }
+
+    async function getPython() {
+      if (!pyodidePromise) pyodidePromise = loadPyodide();
+      return pyodidePromise;
+    }
+
+    async function runChecks() {
+      const button = $('runCode');
+      const feedback = $('feedback');
+      const outputPanel = $('output');
+      button.disabled = true;
+      button.querySelector('span:last-child').textContent = 'Running...';
+      feedback.className = 'feedback';
+      try {
+        const pyodide = await getPython();
+        const exercise = exercises[currentIndex];
+        const payload = JSON.stringify({ code: $('codeEditor').value, inputs: exercise.inputs || [], testCases: exercise.testCases || null, check: exercise.check });
+        const harness = `import builtins, contextlib, io, json\npayload = json.loads(${JSON.stringify(payload)})\noriginal_input = builtins.input\noutputs = []\nfor case_inputs in payload.get("testCases") or [payload["inputs"]]:\n    answers = iter(case_inputs)\n    output_stream = io.StringIO()\n    builtins.input = lambda prompt="", answers=answers: next(answers)\n    scope = {"__name__": "__main__"}\n    scope["scope"] = scope\n    try:\n        with contextlib.redirect_stdout(output_stream):\n            exec(payload["code"], scope)\n    finally:\n        builtins.input = original_input\n    output = output_stream.getvalue()\n    scope["output"] = output\n    exec(payload["check"], scope)\n    outputs.append(output)\noutput = "".join(outputs)`;
+        await pyodide.runPythonAsync(harness);
+        const output = pyodide.globals.get('output');
+        outputPanel.textContent = output || '(No output)';
+        feedback.textContent = 'All checks passed. This exercise is complete.';
+        feedback.className = 'feedback show success';
+        completed.add(currentIndex);
+        updateProgress();
+        $('taskHint').hidden = false;
+        $('taskHint').textContent = 'Completed. You can revisit this task any time.';
+      } catch (error) {
+        const message = String(error).replace(/^PythonError:\s*/, '').split('\n').slice(-2).join('\n');
+        let output = '';
+        try { output = (await getPython()).globals.get('output') || ''; } catch {}
+        outputPanel.textContent = output || 'No output yet.';
+        feedback.textContent = message.includes('AssertionError') ? message.split('AssertionError:').pop().trim() || 'Not quite yet. Recheck the values and try again.' : `Python reported: ${message}`;
+        feedback.className = 'feedback show error';
+      } finally {
+        button.disabled = false;
+        button.querySelector('span:last-child').textContent = 'Run checks';
+      }
+    }
+
+    $('runCode').addEventListener('click', runChecks);
+    $('codeEditor').addEventListener('keydown', (event) => {
+      if (event.shiftKey && event.key === 'Enter') { event.preventDefault(); runChecks(); }
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        const start = event.target.selectionStart;
+        event.target.setRangeText('    ', start, event.target.selectionEnd, 'end');
+      }
+    });
+    $('nextTask').addEventListener('click', () => showExercise((currentIndex + 1) % exercises.length));
+    $('resetProgress').addEventListener('click', () => {
+      if (!confirm('Clear all completed exercises on this device?')) return;
+      completed.clear();
+      updateProgress();
+      showExercise(currentIndex);
+    });
+    buildNavigation();
+    showExercise(0);
+    getPython().then(() => { $('loading').remove(); }).catch(() => { $('loading').textContent = 'Python runtime could not load. Check your internet connection and refresh.'; });
+  </script>
+</body>
+</html>
